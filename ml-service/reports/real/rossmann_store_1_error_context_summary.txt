@@ -1,0 +1,27 @@
+Rossmann Store 1 — Error Context Summary
+=========================================
+
+Average Absolute Error by Promo Status:
+  No Promo: 311.42
+  Promo Active: 402.63
+
+Average Absolute Error by Weekend vs Weekday:
+  Weekday: 333.95
+  Weekend: 436.95
+
+Average Absolute Error by Day of Week (1=Mon, 7=Sun):
+  Day 1: 239.50
+  Day 2: 296.59
+  Day 3: 388.03
+  Day 4: 420.78
+  Day 5: 322.86
+  Day 6: 436.95
+
+Average Absolute Error by Month:
+  Month 01: 299.22
+  Month 02: 342.10
+  Month 03: 306.14
+  Month 04: 597.20
+  Month 05: 353.88
+  Month 06: 261.74
+  Month 07: 261.69

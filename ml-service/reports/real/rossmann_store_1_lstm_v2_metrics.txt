@@ -1,0 +1,19 @@
+Rossmann Store 1 - LSTM v2 Metrics
+===================================
+
+Stopped Epoch     : 74
+Best Val Loss     : 0.0078
+Final Test MSE    : 0.0038
+MAE               : 332.43
+RMSE              : 439.03
+MAPE              : 7.32%
+
+Comparison:
+  LSTM v1 MAPE              : 7.76%
+  LSTM v2 MAPE              : 7.32%
+  Last Value Baseline MAPE  : 20.96%
+  Weekly Seasonal MAPE      : 25.79%
+
+  Beats LSTM v1             : YES
+  Beats Last Value Baseline : YES
+  Beats Weekly Baseline     : YES

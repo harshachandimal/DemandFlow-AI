@@ -1,0 +1,10 @@
+--- Baseline Metrics (Test Set) ---
+1. Last Value Baseline:
+   MAE:  935.54
+   RMSE: 1176.05
+   MAPE: 20.96%
+
+2. Weekly Seasonal Baseline:
+   MAE:  1135.91
+   RMSE: 1389.58
+   MAPE: 25.79%

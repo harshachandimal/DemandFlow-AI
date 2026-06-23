@@ -1,0 +1,42 @@
+Rossmann Store 1 - Final Champion Model Summary
+====================================================
+
+Champion Model : LSTM v2 (RossmannEnhancedFutureAwareLSTM)
+Script         : src/real/train_rossmann_lstm_v2.py
+Weights file   : models/real/rossmann_store_1_lstm_v2_model.pth
+Scaler file    : models/real/rossmann_v2_target_scaler.pkl
+Sequences file : data/real/processed/rossmann_store_1_sequences_v2.npz
+
+Champion Metrics (Test Set):
+  MAE  : 332.43
+  RMSE : 439.03
+  MAPE : 7.32%
+
+Comparison Against All Models:
+  Last Value Baseline MAPE    : 20.96%  -> v2 is 13.64 pp better
+  Weekly Seasonal MAPE        : 25.79%  -> v2 is 18.47 pp better
+  LSTM v1 MAPE                : 7.76%   -> v2 is 0.44 pp better
+
+Error by Forecast Day:
+  Day           MAE     RMSE     MAPE
+  ------------------------------------
+  Day 1      334.10   440.33    7.37%
+  Day 2      333.29   439.84    7.34%
+  Day 3      334.31   441.08    7.35%
+  Day 4      332.77   439.86    7.33%
+  Day 5      329.65   437.10    7.27%
+  Day 6      332.64   438.66    7.32%
+  Day 7      330.27   436.33    7.27%
+
+Why LSTM v2 is Selected as Champion:
+  v2 improves on v1 by adding 11 diagnosis-driven features:
+    - is_april: flags Easter-season high-error month
+    - rolling_14_sales, rolling_7_std_sales: medium-term trend + volatility
+    - promo_schoolholiday, weekend_schoolholiday, promo_weekend: interaction signals
+    - days_since_last_promo, days_until_next_promo: promo timing context
+    - is_month_start, is_month_end: payday and clearance effects
+    - sales_vs_lag7: short-term demand momentum (past features only)
+  The deeper future encoder (2-layer MLP vs 1-layer in v1) better handles
+  the non-linear interactions between these richer future features.
+  Early stopping and L2 weight decay prevent the larger feature set
+  from causing overfitting.

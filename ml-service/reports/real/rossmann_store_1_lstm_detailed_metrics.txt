@@ -1,0 +1,25 @@
+Rossmann Store 1 - LSTM Detailed Evaluation
+===========================================
+
+Overall MAE: 351.74
+Overall RMSE: 479.05
+Overall MAPE: 7.76%
+
+Error by Forecast Day:
+Forecast Day    | MAE        | RMSE       | MAPE      
+-------------------------------------------------------
+Day 1           | 356.45     | 487.94     | 7.84%
+Day 2           | 351.55     | 483.55     | 7.75%
+Day 3           | 346.70     | 476.74     | 7.64%
+Day 4           | 346.16     | 473.91     | 7.64%
+Day 5           | 349.85     | 474.83     | 7.72%
+Day 6           | 354.26     | 477.38     | 7.82%
+Day 7           | 357.23     | 478.88     | 7.88%
+
+Baseline Comparison:
+Last Value Baseline MAPE: 20.96%
+Weekly Seasonal Baseline MAPE: 25.79%
+LSTM MAPE: 7.76%
+
+Conclusion:
+LSTM beats both baselines significantly, proving its value over heuristics.

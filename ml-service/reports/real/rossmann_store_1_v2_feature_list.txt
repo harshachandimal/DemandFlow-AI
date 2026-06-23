@@ -1,0 +1,51 @@
+Rossmann Store 1 — v2 Feature List
+====================================
+
+Past feature count:   20
+Future feature count: 18
+
+Past features:
+  01. Sales
+  02. Promo
+  03. SchoolHoliday
+  04. DayOfWeek
+  05. Month
+  06. Day
+  07. IsWeekend
+  08. lag_7_sales
+  09. rolling_7_sales
+  10. rolling_14_sales
+  11. rolling_7_std_sales
+  12. is_month_start
+  13. is_month_end
+  14. is_april
+  15. promo_schoolholiday
+  16. weekend_schoolholiday
+  17. promo_weekend
+  18. days_since_last_promo
+  19. days_until_next_promo
+  20. sales_vs_lag7
+
+Future features:
+  01. Promo
+  02. SchoolHoliday
+  03. DayOfWeek
+  04. Month
+  05. Day
+  06. IsWeekend
+  07. lag_7_sales
+  08. rolling_7_sales
+  09. rolling_14_sales
+  10. rolling_7_std_sales
+  11. is_month_start
+  12. is_month_end
+  13. is_april
+  14. promo_schoolholiday
+  15. weekend_schoolholiday
+  16. promo_weekend
+  17. days_since_last_promo
+  18. days_until_next_promo
+
+Features in Past but NOT in Future (leak risk or unknown ahead):
+  - Sales
+  - sales_vs_lag7

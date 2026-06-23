@@ -1,0 +1,12 @@
+Rossmann Store 1 - LSTM v1 Metrics
+==================================
+Stopped Epoch: 148
+Best Validation Loss: 0.0092
+Final Test MSE: 0.0045
+MAE: 351.74
+RMSE: 479.05
+MAPE: 7.76%
+
+Baseline Comparison:
+Last Value Baseline MAPE: 20.96%
+Weekly Seasonal Baseline MAPE: 25.79%
