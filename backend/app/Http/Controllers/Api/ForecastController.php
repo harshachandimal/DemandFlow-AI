@@ -1,0 +1,81 @@
+<?php
+
+namespace App\Http\Controllers\Api;
+
+use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreForecastRequest;
+use App\Services\DemandForecastService;
+use App\Models\ForecastLog;
+use Exception;
+use Illuminate\Http\JsonResponse;
+
+class ForecastController extends Controller
+{
+    protected DemandForecastService $forecastService;
+
+    public function __construct(DemandForecastService $forecastService)
+    {
+        $this->forecastService = $forecastService;
+    }
+
+    /**
+     * Check ML Service Health.
+     */
+    public function health(): JsonResponse
+    {
+        try {
+            $data = $this->forecastService->health();
+            return response()->json($data);
+        } catch (Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 503);
+        }
+    }
+
+    /**
+     * Get ML Model Info.
+     */
+    public function modelInfo(): JsonResponse
+    {
+        try {
+            $data = $this->forecastService->modelInfo();
+            return response()->json($data);
+        } catch (Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 503);
+        }
+    }
+
+    /**
+     * Make a forecast for Store 1.
+     */
+    public function forecastStoreOne(StoreForecastRequest $request): JsonResponse
+    {
+        try {
+            $payload = $request->validated();
+            
+            // Call the ML service
+            $data = $this->forecastService->forecastStoreOne($payload);
+            
+            // Log the request and response in the database
+            ForecastLog::create([
+                'store_id' => 1,
+                'request_payload' => $payload,
+                'response_payload' => $data,
+                'total_predicted_sales' => $data['business_insights']['total_predicted_sales'] ?? null,
+                'average_predicted_sales' => $data['business_insights']['average_predicted_sales'] ?? null,
+                'stockout_risk' => $data['business_insights']['stockout_risk'] ?? null,
+                'reorder_needed' => $data['business_insights']['reorder_needed'] ?? null,
+            ]);
+
+            return response()->json($data);
+        } catch (Exception $e) {
+            $status = $e->getCode();
+            if (!is_numeric($status) || $status < 100 || $status >= 600) {
+                $status = 500;
+            }
+            if ($status === 500 && str_contains($e->getMessage(), 'ML Service is unavailable')) {
+                $status = 503;
+            }
+            return response()->json(['error' => $e->getMessage()], $status);
+        }
+    }
+}
