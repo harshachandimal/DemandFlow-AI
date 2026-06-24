@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Plus, Play, AlertTriangle, Loader } from 'lucide-react';
+import { Plus, Play } from 'lucide-react';
 import { ScenarioConfig, ScenarioComparisonResponse } from '../types';
 import { compareScenarios } from '../api/scenarioApi';
 import ScenarioFormCard from '../components/scenarios/ScenarioFormCard';
@@ -7,6 +7,11 @@ import ScenarioComparisonTable from '../components/scenarios/ScenarioComparisonT
 import ScenarioForecastChart from '../components/scenarios/ScenarioForecastChart';
 import BestScenarioCard from '../components/scenarios/BestScenarioCard';
 import ScenarioReportCard from '../components/reports/ScenarioReportCard';
+import ServiceStatusBanner from '../components/layout/ServiceStatusBanner';
+import ErrorState from '../components/ui/ErrorState';
+import EmptyState from '../components/ui/EmptyState';
+import Button from '../components/ui/Button';
+import { GitCompare } from 'lucide-react';
 
 export default function ScenarioPlannerPage() {
   const [scenarios, setScenarios] = useState<ScenarioConfig[]>([
@@ -55,8 +60,10 @@ export default function ScenarioPlannerPage() {
   };
 
   return (
-    <main style={{ maxWidth: '1400px', margin: '0 auto', padding: '2rem 1.5rem', minHeight: 'calc(100vh - 64px)' }}>
+    <main style={{ maxWidth: '1400px', margin: '0 auto', padding: '0', minHeight: 'calc(100vh - 64px)' }}>
       <div className="fade-up">
+        <ServiceStatusBanner />
+        
         <h1 style={{ fontSize: '1.75rem', fontWeight: 800, color: '#f8fafc', letterSpacing: '-0.02em', marginBottom: '0.5rem' }}>
           What-if Scenario Planner
         </h1>
@@ -65,12 +72,8 @@ export default function ScenarioPlannerPage() {
         </p>
 
         {error && (
-          <div style={{
-            padding: '1rem 1.5rem', background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.3)',
-            borderRadius: '0.75rem', color: '#fca5a5', marginBottom: '2rem', display: 'flex', alignItems: 'center', gap: '0.75rem'
-          }}>
-            <AlertTriangle size={20} />
-            <div style={{ fontWeight: 500 }}>{error}</div>
+          <div className="mb-8">
+            <ErrorState message={error} title="Comparison Failed" />
           </div>
         )}
 
@@ -91,11 +94,18 @@ export default function ScenarioPlannerPage() {
         </div>
 
         <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '3rem' }}>
-          <button onClick={handleSubmit} disabled={loading} className="btn-primary" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.75rem 2rem', fontSize: '1.1rem' }}>
-            {loading ? <Loader className="animate-spin" size={20} /> : <Play size={20} />}
-            {loading ? 'Comparing...' : 'Compare Scenarios'}
-          </button>
+          <Button onClick={handleSubmit} loading={loading} icon={<Play size={20} />}>
+            Compare Scenarios
+          </Button>
         </div>
+
+        {!results && !loading && !error && (
+          <EmptyState 
+            icon={<GitCompare size={48} />}
+            title="No Comparison Yet"
+            description="Add multiple scenarios above and click Compare Scenarios to see the impact of your decisions."
+          />
+        )}
 
         {results && (
           <div className="fade-up" style={{ animationDelay: '0.2s' }}>

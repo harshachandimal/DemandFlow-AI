@@ -1,6 +1,6 @@
 # DemandFlow AI
 
-AI-powered demand forecasting platform for retail. Combines a PyTorch LSTM model, a FastAPI ML inference service, a Laravel API gateway, and a React dashboard.
+DemandFlow AI predicts 7-day demand, provides inventory recommendations, compares scenarios, stores forecast history, and generates executive reports. It combines a PyTorch LSTM model, a FastAPI ML inference service, a Laravel API gateway, and a React dashboard.
 
 ---
 
@@ -13,7 +13,7 @@ React Frontend (Vite + Tailwind)
 Laravel Backend (API Gateway)
         │
         ▼  HTTP (port 8000 → 8001)
-FastAPI ML Service
+FastAPI Microservice
         │
         ▼
 PyTorch LSTM Model (Rossmann Store #1)
@@ -63,13 +63,16 @@ npm run dev
 
 ---
 
-## URLs
+## URLs & Frontend Routes
 
 | Service | URL |
 |---|---|
-| React Dashboard | http://127.0.0.1:5173/dashboard |
-| Laravel API | http://127.0.0.1:8000/api |
-| FastAPI Docs | http://127.0.0.1:8001/docs |
+| Landing Page | `http://127.0.0.1:5173/` |
+| React Dashboard | `http://127.0.0.1:5173/dashboard` |
+| React History | `http://127.0.0.1:5173/history` |
+| React Scenarios | `http://127.0.0.1:5173/scenarios` |
+| Laravel API | `http://127.0.0.1:8000/api` |
+| FastAPI Docs | `http://127.0.0.1:8001/docs` |
 
 ---
 
@@ -121,16 +124,17 @@ npm run dev
 
 ---
 
-## Dashboard Features (Phase 5.1 - 5.5)
+## Dashboard Features (Phase 5.1 - 5.6)
 
-- **System Status** — Laravel & ML service connection health
-- **Champion Model Info** — model name, version, MAE / RMSE / MAPE
-- **Forecast Form** — configurable stock, pricing, promo/holiday dates
-- **KPI Cards** — total sales, avg daily, highest & lowest demand day
-- **Business Insights** — expected revenue, projected stock, stockout risk, reorder recommendation
-- **Forecast Chart** — responsive Recharts bar + line combo chart
-- **Forecast Table** — day-by-day table with demand level badges
-- **Forecast History Dashboard** — browse, view details, and manage past forecasts using the `/history` route
+- **Landing Page** — Portfolio-level introduction, architecture flow, and model credibility metrics.
+- **System Status** — Global banner showing Laravel & ML service connection health.
+- **Champion Model Info** — model name, version, MAE / RMSE / MAPE.
+- **Forecast Form** — configurable stock, pricing, promo/holiday dates.
+- **KPI Cards** — total sales, avg daily, highest & lowest demand day.
+- **Business Insights** — expected revenue, projected stock, stockout risk, reorder recommendation.
+- **Forecast Chart** — responsive Recharts bar + line combo chart.
+- **Forecast Table** — day-by-day table with demand level badges.
+- **Forecast History Dashboard** — browse, view details, and manage past forecasts using the `/history` route.
 - **What-if Scenario Planner** — compare up to 5 parallel forecasts side-by-side, visualizing data on a combined line chart, and utilizing an automated 'Best Scenario' heuristic on the `/scenarios` route.
 - **Executive Reporting & Exporting** — clean, professional, print-ready reports that convert ML predictions into actionable business decisions. Available across:
   - Dashboard Forecast Result

@@ -3,8 +3,11 @@ import { getForecastLogs, getForecastLog, deleteForecastLog } from '../api/histo
 import { ForecastLogSummary, ForecastLog } from '../types';
 import ForecastHistoryTable from '../components/history/ForecastHistoryTable';
 import ForecastLogDetail from '../components/history/ForecastLogDetail';
-import HistoryEmptyState from '../components/history/HistoryEmptyState';
-import { Loader, AlertTriangle } from 'lucide-react';
+import ServiceStatusBanner from '../components/layout/ServiceStatusBanner';
+import LoadingState from '../components/ui/LoadingState';
+import ErrorState from '../components/ui/ErrorState';
+import EmptyState from '../components/ui/EmptyState';
+import { Database } from 'lucide-react';
 
 export default function HistoryPage() {
   const [logs, setLogs] = useState<ForecastLogSummary[]>([]);
@@ -59,23 +62,16 @@ export default function HistoryPage() {
   };
 
   if (loading) {
-    return (
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '60vh' }}>
-        <Loader className="animate-spin" size={48} color="#06b6d4" style={{ marginBottom: '1rem' }} />
-        <div style={{ color: '#94a3b8', fontSize: '1.1rem', fontWeight: 500 }}>Loading forecast history...</div>
-      </div>
-    );
+    return <LoadingState message="Loading forecast history..." minHeight="60vh" />;
   }
 
   return (
-    <main style={{ maxWidth: '1400px', margin: '0 auto', padding: '2rem 1.5rem', minHeight: 'calc(100vh - 64px)' }}>
+    <main style={{ maxWidth: '1400px', margin: '0 auto', padding: '0', minHeight: 'calc(100vh - 64px)' }}>
+      <ServiceStatusBanner />
+      
       {error && (
-        <div className="fade-up" style={{
-          padding: '1rem 1.5rem', background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.3)',
-          borderRadius: '0.75rem', color: '#fca5a5', marginBottom: '2rem', display: 'flex', alignItems: 'center', gap: '0.75rem'
-        }}>
-          <AlertTriangle size={20} />
-          <div style={{ fontWeight: 500 }}>{error}</div>
+        <div className="mb-8">
+          <ErrorState message={error} title="History Error" />
         </div>
       )}
 
@@ -90,7 +86,11 @@ export default function HistoryPage() {
           </div>
 
           {logs.length === 0 ? (
-            <HistoryEmptyState />
+            <EmptyState 
+              icon={<Database size={48} />}
+              title="No Forecast History"
+              description="You haven't run any forecasts yet. Go to the dashboard and submit a new forecast to start building your history."
+            />
           ) : (
             <ForecastHistoryTable logs={logs} onView={handleView} onDelete={handleDelete} />
           )}
@@ -103,10 +103,7 @@ export default function HistoryPage() {
           background: 'rgba(15,23,42,0.8)', backdropFilter: 'blur(4px)',
           display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 50
         }}>
-          <div className="glass-card" style={{ padding: '2rem', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-            <Loader className="animate-spin" size={32} color="#06b6d4" style={{ marginBottom: '1rem' }} />
-            <div style={{ color: '#e2e8f0', fontWeight: 500 }}>Loading details...</div>
-          </div>
+          <LoadingState message="Loading details..." minHeight="200px" />
         </div>
       )}
     </main>

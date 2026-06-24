@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
-import { getMlHealth, getModelInfo, forecastStoreOne } from '../api/forecastApi';
-import StatusCard from '../components/forecast/StatusCard';
+import { getModelInfo, forecastStoreOne } from '../api/forecastApi';
+import ServiceStatusBanner from '../components/layout/ServiceStatusBanner';
 import ModelInfoCard from '../components/forecast/ModelInfoCard';
 import ForecastReportCard from '../components/reports/ForecastReportCard';
 import ForecastForm from '../components/forecast/ForecastForm';
@@ -8,26 +8,22 @@ import DemandSummaryCards from '../components/forecast/DemandSummaryCards';
 import BusinessInsightsCard from '../components/forecast/BusinessInsightsCard';
 import ForecastChart from '../components/forecast/ForecastChart';
 import ForecastTable from '../components/forecast/ForecastTable';
-import { HealthStatus, ModelInfo, ForecastPayload, ForecastResult, BusinessInsights } from '../types';
+import { ModelInfo, ForecastPayload, ForecastResult, BusinessInsights } from '../types';
+import ErrorState from '../components/ui/ErrorState';
+import EmptyState from '../components/ui/EmptyState';
+import { Activity } from 'lucide-react';
 
 export default function DashboardPage() {
-  const [health, setHealth]         = useState<HealthStatus | null>(null);
   const [modelInfo, setModelInfo]   = useState<ModelInfo | null>(null);
-  const [healthLoading, setHL]      = useState(true);
   const [modelLoading, setML]       = useState(true);
-  const [healthError, setHE]        = useState<string | null>(null);
 
   const [forecast, setForecast]         = useState<ForecastResult[] | null>(null);
   const [insights, setInsights]         = useState<BusinessInsights | null>(null);
   const [forecastLoading, setFL]        = useState(false);
   const [forecastError, setForecastErr] = useState<string | null>(null);
 
-  // Load health + model info on mount
+  // Load model info on mount
   useEffect(() => {
-    getMlHealth()
-      .then(setHealth)
-      .catch((e: Error) => setHE(e.message))
-      .finally(() => setHL(false));
 
     getModelInfo()
       .then(setModelInfo)
@@ -71,9 +67,11 @@ export default function DashboardPage() {
         </p>
       </div>
 
-      {/* Status + Model Info row */}
+      {/* Status Banner */}
+      <ServiceStatusBanner />
+
+      {/* Model Info row */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '1rem' }}>
-        <StatusCard health={health} loading={healthLoading} error={healthError} />
         <ModelInfoCard modelInfo={modelInfo} loading={modelLoading} />
       </div>
 
@@ -82,17 +80,7 @@ export default function DashboardPage() {
 
       {/* Forecast error */}
       {forecastError && (
-        <div
-          style={{
-            padding: '1rem 1.25rem',
-            background: 'rgba(239,68,68,0.08)',
-            border: '1px solid rgba(239,68,68,0.2)',
-            borderRadius: '0.75rem',
-            color: '#f87171', fontSize: '0.875rem',
-          }}
-        >
-          ⚠️ Forecast failed: {forecastError}
-        </div>
+        <ErrorState message={forecastError} title="Forecast Failed" />
       )}
 
       {/* Forecast results */}
@@ -113,16 +101,11 @@ export default function DashboardPage() {
 
       {/* Empty state — no forecast yet */}
       {!forecast && !forecastLoading && !forecastError && (
-        <div
-          style={{
-            textAlign: 'center', padding: '3rem',
-            color: '#334155', fontSize: '0.9rem',
-            border: '1px dashed rgba(99,179,237,0.1)',
-            borderRadius: '1rem',
-          }}
-        >
-          Configure the form above and click <strong style={{ color: '#475569' }}>Run Forecast</strong> to generate predictions.
-        </div>
+        <EmptyState 
+          icon={<Activity size={48} />}
+          title="No Forecast Generated"
+          description="Configure the form above and click Run Forecast to generate predictions."
+        />
       )}
     </div>
   );

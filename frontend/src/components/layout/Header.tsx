@@ -17,12 +17,13 @@ export default function Header() {
   const linkStyle = ({ isActive }: { isActive: boolean }) => ({
     padding: '0.4rem 0.8rem',
     borderRadius: '0.5rem',
-    fontSize: '0.85rem',
+    fontSize: '0.875rem',
     fontWeight: 600,
     color: isActive ? '#fff' : '#94a3b8',
     background: isActive ? 'rgba(6,182,212,0.15)' : 'transparent',
     textDecoration: 'none',
-    transition: 'all 0.2s'
+    transition: 'all 0.2s',
+    whiteSpace: 'nowrap' as const
   });
 
   return (
@@ -65,14 +66,15 @@ export default function Header() {
         </div>
 
         {/* Navigation */}
-        <nav style={{ display: 'flex', gap: '0.5rem', flex: 1, marginLeft: '3rem' }}>
+        <nav style={{ display: 'flex', gap: '0.5rem', flex: 1, marginLeft: '3rem', overflowX: 'auto', scrollbarWidth: 'none', msOverflowStyle: 'none' }} className="hidden sm:flex">
+          <NavLink to="/" style={linkStyle}>Home</NavLink>
           <NavLink to="/dashboard" style={linkStyle}>Dashboard</NavLink>
           <NavLink to="/history" style={linkStyle}>History</NavLink>
           <NavLink to="/scenarios" style={linkStyle}>Scenario Planner</NavLink>
         </nav>
 
         {/* Right area: live clock + Store badge */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }} className="hidden md:flex">
           <div style={{ textAlign: 'right' }}>
             <div style={{ fontSize: '0.75rem', color: 'var(--color-muted)' }}>Live Clock</div>
             <div style={{ fontSize: '0.9rem', fontWeight: 600, color: '#06b6d4', fontVariantNumeric: 'tabular-nums' }}>
@@ -85,11 +87,20 @@ export default function Header() {
               background: 'rgba(6,182,212,0.12)',
               border: '1px solid rgba(6,182,212,0.25)',
               fontSize: '0.75rem', fontWeight: 600, color: '#06b6d4',
+              whiteSpace: 'nowrap'
             }}
           >
             Store #1 · Rossmann
           </div>
         </div>
+      </div>
+      
+      {/* Mobile Navigation Row */}
+      <div className="sm:hidden flex overflow-x-auto gap-2 px-6 pb-3 border-t border-slate-800 pt-3" style={{ scrollbarWidth: 'none' }}>
+        <NavLink to="/" style={linkStyle}>Home</NavLink>
+        <NavLink to="/dashboard" style={linkStyle}>Dashboard</NavLink>
+        <NavLink to="/history" style={linkStyle}>History</NavLink>
+        <NavLink to="/scenarios" style={linkStyle}>Scenario Planner</NavLink>
       </div>
     </header>
   );
