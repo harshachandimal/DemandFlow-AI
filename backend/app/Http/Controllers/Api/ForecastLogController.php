@@ -24,6 +24,7 @@ class ForecastLogController extends Controller
                 'reorder_needed',
                 'created_at'
             ])
+            ->where('user_id', auth()->id())
             ->orderBy('created_at', 'desc')
             ->limit((int) $limit)
             ->get();
@@ -36,6 +37,10 @@ class ForecastLogController extends Controller
      */
     public function show(ForecastLog $forecastLog)
     {
+        if ($forecastLog->user_id !== auth()->id()) {
+            return response()->json(['message' => 'Forbidden'], 403);
+        }
+
         // Select all fields for the detail view
         return response()->json($forecastLog);
     }
@@ -45,6 +50,10 @@ class ForecastLogController extends Controller
      */
     public function destroy(ForecastLog $forecastLog)
     {
+        if ($forecastLog->user_id !== auth()->id()) {
+            return response()->json(['message' => 'Forbidden'], 403);
+        }
+
         $forecastLog->delete();
         
         return response()->json([

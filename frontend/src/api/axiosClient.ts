@@ -6,10 +6,24 @@ const axiosClient = axios.create({
   timeout: 30_000,
 });
 
+// Request interceptor — attach auth token
+axiosClient.interceptors.request.use((config) => {
+  const token = localStorage.getItem('token');
+  if (token && config.headers) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+
 // Response error interceptor — normalise error messages
 axiosClient.interceptors.response.use(
   (res: AxiosResponse) => res,
   (err: AxiosError<any>) => {
+    if (err.response?.status === 401) {
+      localStorage.removeItem('token');
+      // Optional: window.location.href = '/login'; 
+      // But we will handle this in AuthContext or ProtectedRoute instead of hard redirecting here.
+    }
     const message =
       err.response?.data?.error ||
       err.response?.data?.message ||

@@ -80,6 +80,10 @@ npm run dev
 
 | Method | Path | Description |
 |---|---|---|
+| POST | `/api/auth/register` | Register a new user |
+| POST | `/api/auth/login` | Login and receive Sanctum token |
+| GET | `/api/auth/me` | Get current authenticated user |
+| POST | `/api/auth/logout` | Logout and invalidate token |
 | GET | `/api/ml/health` | ML service health check |
 | GET | `/api/ml/model-info` | Champion model metadata & metrics |
 | POST | `/api/ml/forecast/store-1` | Generate 7-day demand forecast |
@@ -87,6 +91,14 @@ npm run dev
 | GET | `/api/ml/forecast-logs` | Get paginated forecast history logs |
 | GET | `/api/ml/forecast-logs/{id}` | Get specific forecast log details |
 | DELETE | `/api/ml/forecast-logs/{id}` | Delete a forecast log |
+
+### How to test auth flow
+
+1. Open `http://127.0.0.1:5173/register` and create an account.
+2. Login at `http://127.0.0.1:5173/login`.
+3. The Dashboard, History, and Scenario Planner routes are now protected.
+4. Try creating a forecast, then navigate to History. You should only see the logs you created.
+5. Click Logout to invalidate your session.
 
 ### Example Forecast Request
 
