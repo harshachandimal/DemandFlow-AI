@@ -1,6 +1,9 @@
+fastapi
+uvicorn
+torch
 pandas
 numpy
-matplotlib
 scikit-learn
 joblib
-torch
+pydantic
+requests

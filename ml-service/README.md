@@ -837,3 +837,73 @@ Output files:
 - `reports/real/rossmann_store_1_next_7_day_forecast.png` -- bar chart forecast
 
 To customise the 7-day plan, edit the `Promo` and `SchoolHoliday` defaults in the `future_rows` loop inside the script, or toggle `FORECAST_OPEN_DAYS_ONLY` at the top of the file.
+
+## Phase 3.1: FastAPI ML Service
+
+### How to run the ML service API
+```bash
+uvicorn src.api.main:app --reload --host 127.0.0.1 --port 8000
+```
+
+## Phase 3.2: Business Intelligence
+
+DemandFlow AI not only predicts sales but also converts these predictions into actionable business insights. While the ML model predicts demand, the business logic converts demand into inventory decisions.
+
+### New Request Fields
+You can now pass the following optional parameters in the forecast request:
+- `current_stock` (int): Current available inventory.
+- `unit_price` (float): Selling price per unit.
+- `reorder_lead_time_days` (int): How many days the supplier takes to restock (default 3).
+- `safety_stock_percentage` (float): Extra stock buffer percentage (default 0.15).
+
+### Example Request
+```json
+{
+  "forecast_days": 7,
+  "forecast_open_days_only": true,
+  "promo_dates": [],
+  "school_holiday_dates": [],
+  "current_stock": 18000,
+  "unit_price": 12.5,
+  "reorder_lead_time_days": 3,
+  "safety_stock_percentage": 0.15
+}
+```
+
+### Example Response Business Insights
+```json
+"business_insights": {
+  "total_predicted_sales": 26076,
+  "average_predicted_sales": 3725,
+  "expected_revenue": 325950.0,
+  "current_stock": 18000,
+  "projected_stock_after_7_days": -8076,
+  "stockout_risk": "high",
+  "recommended_reorder_quantity": 11987,
+  "reorder_needed": true,
+  "recommendation": "High stock-out risk. Reorder immediately."
+}
+```
+
+## Phase 3.3: FastAPI Service Testing
+
+The ML service is fully verified and ready for backend integration.
+
+### How to test the API
+```bash
+python src/api/test_api_endpoints.py
+```
+
+### Endpoint List
+- `GET /` - Root status
+- `GET /health` - Health check and model loaded status
+- `GET /model-info` - Details of the currently loaded champion model
+- `POST /api/v1/forecast/store-1` - Generates a 7-day forecast with business insights
+
+### Current Champion Model Metrics
+- Model: RossmannEnhancedFutureAwareLSTM v2
+- MAE: 332.43
+- RMSE: 439.03
+- MAPE: 7.32%
+
+*Note: In the next phase, the Laravel backend will call this FastAPI service to retrieve forecast data.*
