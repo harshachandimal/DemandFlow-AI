@@ -57,7 +57,6 @@ class ForecastController extends Controller
             
             // Log the request and response in the database
             ForecastLog::create([
-                'user_id' => auth()->id(),
                 'store_id' => 1,
                 'request_payload' => $payload,
                 'response_payload' => $data,

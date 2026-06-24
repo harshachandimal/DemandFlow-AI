@@ -1,16 +1,18 @@
-
-import { Activity, LogOut, User as UserIcon } from 'lucide-react';
-import { NavLink, useNavigate } from 'react-router-dom';
-import { useAuth } from '../../context/AuthContext';
+import { useState, useEffect } from 'react';
+import { Activity } from 'lucide-react';
+import { NavLink } from 'react-router-dom';
 
 export default function Header() {
-  const { user, isAuthenticated, logoutUser } = useAuth();
-  const navigate = useNavigate();
+  const [time, setTime] = useState(new Date());
 
-  const handleLogout = async () => {
-    await logoutUser();
-    navigate('/login');
-  };
+  useEffect(() => {
+    const t = setInterval(() => setTime(new Date()), 1000);
+    return () => clearInterval(t);
+  }, []);
+
+  const timeStr = time.toLocaleTimeString('en-US', {
+    hour: '2-digit', minute: '2-digit', second: '2-digit',
+  });
 
   const linkStyle = ({ isActive }: { isActive: boolean }) => ({
     padding: '0.4rem 0.8rem',
@@ -64,40 +66,21 @@ export default function Header() {
         </div>
 
         {/* Navigation */}
-        <nav style={{ display: 'flex', gap: '0.5rem', flex: 1, marginLeft: '3rem', overflowX: 'auto', scrollbarWidth: 'none', msOverflowStyle: 'none' }} className="hidden sm:flex items-center">
+        <nav style={{ display: 'flex', gap: '0.5rem', flex: 1, marginLeft: '3rem', overflowX: 'auto', scrollbarWidth: 'none', msOverflowStyle: 'none' }} className="hidden sm:flex">
           <NavLink to="/" style={linkStyle}>Home</NavLink>
-          {isAuthenticated ? (
-            <>
-              <NavLink to="/dashboard" style={linkStyle}>Dashboard</NavLink>
-              <NavLink to="/history" style={linkStyle}>History</NavLink>
-              <NavLink to="/scenarios" style={linkStyle}>Scenario Planner</NavLink>
-            </>
-          ) : (
-            <>
-              <NavLink to="/login" style={linkStyle}>Login</NavLink>
-              <NavLink to="/register" style={linkStyle}>Register</NavLink>
-            </>
-          )}
+          <NavLink to="/dashboard" style={linkStyle}>Dashboard</NavLink>
+          <NavLink to="/history" style={linkStyle}>History</NavLink>
+          <NavLink to="/scenarios" style={linkStyle}>Scenario Planner</NavLink>
         </nav>
 
-        {/* Right area: user state + Store badge */}
+        {/* Right area: live clock + Store badge */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }} className="hidden md:flex">
-          {isAuthenticated && user && (
-            <div className="flex items-center gap-4 border-r border-white/10 pr-6">
-              <div className="flex items-center gap-2 text-sm text-gray-300">
-                <UserIcon className="h-4 w-4 text-emerald-400" />
-                <span className="font-medium">{user.name}</span>
-              </div>
-              <button
-                onClick={handleLogout}
-                className="flex items-center gap-1.5 text-xs font-medium text-gray-400 hover:text-white transition-colors"
-              >
-                <LogOut className="h-3.5 w-3.5" />
-                Logout
-              </button>
+          <div style={{ textAlign: 'right' }}>
+            <div style={{ fontSize: '0.75rem', color: 'var(--color-muted)' }}>Live Clock</div>
+            <div style={{ fontSize: '0.9rem', fontWeight: 600, color: '#06b6d4', fontVariantNumeric: 'tabular-nums' }}>
+              {timeStr}
             </div>
-          )}
-          
+          </div>
           <div
             style={{
               padding: '0.3rem 0.75rem', borderRadius: '9999px',
@@ -113,37 +96,11 @@ export default function Header() {
       </div>
       
       {/* Mobile Navigation Row */}
-      <div className="sm:hidden flex flex-col gap-2 border-t border-slate-800 pb-3">
-        <div className="flex overflow-x-auto gap-2 px-6 pt-3" style={{ scrollbarWidth: 'none' }}>
-          <NavLink to="/" style={linkStyle}>Home</NavLink>
-          {isAuthenticated ? (
-            <>
-              <NavLink to="/dashboard" style={linkStyle}>Dashboard</NavLink>
-              <NavLink to="/history" style={linkStyle}>History</NavLink>
-              <NavLink to="/scenarios" style={linkStyle}>Scenario Planner</NavLink>
-            </>
-          ) : (
-            <>
-              <NavLink to="/login" style={linkStyle}>Login</NavLink>
-              <NavLink to="/register" style={linkStyle}>Register</NavLink>
-            </>
-          )}
-        </div>
-        {isAuthenticated && user && (
-          <div className="flex items-center justify-between px-6 pt-2 border-t border-slate-800/50">
-            <div className="flex items-center gap-2 text-sm text-gray-300">
-              <UserIcon className="h-4 w-4 text-emerald-400" />
-              <span className="font-medium">{user.name}</span>
-            </div>
-            <button
-              onClick={handleLogout}
-              className="flex items-center gap-1.5 text-xs font-medium text-gray-400 hover:text-white transition-colors"
-            >
-              <LogOut className="h-3.5 w-3.5" />
-              Logout
-            </button>
-          </div>
-        )}
+      <div className="sm:hidden flex overflow-x-auto gap-2 px-6 pb-3 border-t border-slate-800 pt-3" style={{ scrollbarWidth: 'none' }}>
+        <NavLink to="/" style={linkStyle}>Home</NavLink>
+        <NavLink to="/dashboard" style={linkStyle}>Dashboard</NavLink>
+        <NavLink to="/history" style={linkStyle}>History</NavLink>
+        <NavLink to="/scenarios" style={linkStyle}>Scenario Planner</NavLink>
       </div>
     </header>
   );

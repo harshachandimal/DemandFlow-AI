@@ -48,11 +48,11 @@ export default function ModelInfoCard({ modelInfo, loading }: ModelInfoCardProps
     <div className="glass-card" style={{ padding: '1.25rem' }}>
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: '1rem' }}>
-        <div>
+        <div style={{ flex: 1, minWidth: 0, paddingRight: '0.5rem' }}>
           <div style={{ fontSize: '0.65rem', fontWeight: 700, color: 'var(--color-muted)', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
             Champion Model
           </div>
-          <div style={{ fontSize: '1rem', fontWeight: 700, color: '#e2e8f0', marginTop: '0.15rem' }}>
+          <div style={{ fontSize: '1rem', fontWeight: 700, color: '#e2e8f0', marginTop: '0.15rem', wordBreak: 'break-word' }}>
             {modelInfo.model_name || 'N/A'}
           </div>
         </div>
@@ -61,9 +61,10 @@ export default function ModelInfoCard({ modelInfo, loading }: ModelInfoCardProps
             padding: '0.3rem 0.6rem', borderRadius: '9999px',
             background: 'rgba(6,182,212,0.1)', border: '1px solid rgba(6,182,212,0.2)',
             fontSize: '0.7rem', fontWeight: 700, color: '#06b6d4',
+            flexShrink: 0
           }}
         >
-          v{modelInfo.model_version || '1.0'}
+          {modelInfo.model_version?.startsWith('v') ? modelInfo.model_version : `v${modelInfo.model_version || '1.0'}`}
         </div>
       </div>
 

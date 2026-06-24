@@ -42,9 +42,11 @@ def model_info():
         "model_name": "RossmannEnhancedFutureAwareLSTM",
         "model_version": "v2",
         "store_id": 1,
-        "mae": 332.43,
-        "rmse": 439.03,
-        "mape": 7.32,
+        "metrics": {
+            "mae": 332.43,
+            "rmse": 439.03,
+            "mape": 7.32
+        },
         "supports_business_insights": True
     }
 

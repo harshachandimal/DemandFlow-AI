@@ -44,7 +44,7 @@ export default function ServiceStatusBanner() {
     );
   }
 
-  if (health?.status !== 'healthy') {
+  if (health?.status !== 'ok' && health?.status !== 'healthy') {
     return (
       <div className="bg-amber-500/10 border border-amber-500/20 rounded-lg p-3 flex items-center gap-3 text-amber-400 text-sm mb-6">
         <AlertTriangle size={18} />

@@ -8,7 +8,7 @@ export default function LandingPage() {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-[#0b0f1a] text-slate-200 selection:bg-cyan-500/30 overflow-hidden relative font-sans">
+    <div className="w-full min-h-screen bg-[#0b0f1a] text-slate-200 selection:bg-cyan-500/30 overflow-hidden relative font-sans">
       
       {/* Background Ambience */}
       <div className="absolute inset-0 z-0 pointer-events-none" aria-hidden="true">
@@ -16,7 +16,7 @@ export default function LandingPage() {
         <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-emerald-900/10 blur-[120px]" />
       </div>
 
-      <div className="relative z-10 max-w-6xl mx-auto px-6 pt-24 pb-32">
+      <div className="w-full max-w-6xl mx-auto px-6 pt-24 pb-32 relative z-10">
         
         {/* Header / Hero Section */}
         <header className="text-center mb-24 fade-up">

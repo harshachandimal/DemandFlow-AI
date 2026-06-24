@@ -1,0 +1,19 @@
+LSTM v4 Residual Forecasting Model Metrics
+=============================================
+Best Validation Loss: 0.077263
+Stopped Epoch       : 81
+
+Weekly Baseline Metrics:
+  MAE  : 14.31 units
+  RMSE : 20.30 units
+  MAPE : 14.56%
+
+LSTM v4 Residual Model Metrics:
+  MAE  : 22.00 units
+  RMSE : 24.10 units
+  MAPE : 23.06%
+
+Relative Lift Over Baseline:
+  MAE  : -7.69 units (Degraded)
+  RMSE : -3.80 units (Degraded)
+  MAPE : -8.50% (Degraded)

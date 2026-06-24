@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 class ForecastLog extends Model
 {
     protected $fillable = [
-        'user_id',
         'store_id',
         'request_payload',
         'response_payload',

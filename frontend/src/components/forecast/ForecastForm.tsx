@@ -30,6 +30,27 @@ const parseDates = (raw: string): string[] =>
     .map((s) => s.trim())
     .filter(Boolean);
 
+interface FieldProps {
+  id: string;
+  label: string;
+  type?: string;
+  step?: string;
+  placeholder?: string;
+  value: string | number;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+}
+
+const F: React.FC<FieldProps> = ({ id, label, type = 'number', step, placeholder, value, onChange }) => (
+  <div>
+    <label htmlFor={id} className="form-label">{label}</label>
+    <input
+      id={id} type={type} step={step} placeholder={placeholder}
+      value={value} onChange={onChange}
+      className="form-input"
+    />
+  </div>
+);
+
 interface ForecastFormProps {
   onSubmit: (payload: ForecastPayload) => void;
   loading: boolean;
@@ -55,27 +76,6 @@ export default function ForecastForm({ onSubmit, loading }: ForecastFormProps) {
   };
 
   const handleReset = () => setForm(DEFAULT);
-
-  interface FieldProps {
-    id: string;
-    label: string;
-    type?: string;
-    step?: string;
-    placeholder?: string;
-    value: string | number;
-    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  }
-
-  const F: React.FC<FieldProps> = ({ id, label, type = 'number', step, placeholder, value, onChange }) => (
-    <div>
-      <label htmlFor={id} className="form-label">{label}</label>
-      <input
-        id={id} type={type} step={step} placeholder={placeholder}
-        value={value} onChange={onChange}
-        className="form-input"
-      />
-    </div>
-  );
 
   return (
     <div className="glass-card" style={{ padding: '1.5rem' }}>

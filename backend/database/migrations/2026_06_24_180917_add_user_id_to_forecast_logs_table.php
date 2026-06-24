@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('forecast_logs', function (Blueprint $table) {
-            $table->foreignId('user_id')->nullable()->constrained('users')->nullOnDelete()->after('id');
+            //
         });
     }
 
@@ -22,8 +22,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('forecast_logs', function (Blueprint $table) {
-            $table->dropForeign(['user_id']);
-            $table->dropColumn('user_id');
+            //
         });
     }
 };

@@ -1,0 +1,20 @@
+LSTM v3 Regularized – Validation Split + Early Stopping
+========================================================
+Best Val Loss (scaled) : 0.004012
+Stopped at epoch       : 27
+Test MSE (scaled)      : 0.038875
+MAE                    : 16.77 units
+RMSE                   : 19.13 units
+MAPE                   : 17.26%
+
+Regularisation Configuration
+----------------------------------------
+LSTM dropout           : 0.3
+Future encoder dropout : 0.2
+Prediction head dropout: 0.2
+Weight decay (L2)      : 1e-4
+Early stopping patience: 20
+Max epochs             : 300
+Batch size             : 16
+Learning rate          : 0.001
+Total params           : 58,753

@@ -1,0 +1,19 @@
+LSTM v3 – Seasonal + Future-Aware Model
+========================================
+Test MSE (scaled) : 0.043270
+MAE               : 17.52 units
+RMSE              : 20.18 units
+MAPE              : 17.88%
+
+Model Configuration
+----------------------------------------
+past_input_size   : 8
+future_input_size : 7
+hidden_size       : 64
+num_layers        : 2
+dropout           : 0.2
+forecast_days     : 7
+epochs            : 150
+batch_size        : 16
+learning_rate     : 0.001
+total_params      : 58,753
