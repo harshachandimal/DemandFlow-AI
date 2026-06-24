@@ -84,3 +84,22 @@ export interface ForecastLog extends ForecastLogSummary {
   request_payload: ForecastPayload;
   response_payload: ForecastResponse;
 }
+
+export interface ScenarioConfig extends Partial<ForecastPayload> {
+  name: string;
+}
+
+export interface ScenarioResult {
+  scenario_name: string;
+  forecast: ForecastResult[];
+  business_insights: BusinessInsights;
+}
+
+export interface ScenarioComparisonResponse {
+  scenario_count: number;
+  scenarios: ScenarioResult[];
+  best_scenario: {
+    scenario_name: string;
+    reason: string;
+  };
+}

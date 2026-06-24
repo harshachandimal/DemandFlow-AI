@@ -14,6 +14,7 @@ Route::prefix('ml')->group(function () {
     Route::get('/health', [ForecastController::class, 'health']);
     Route::get('/model-info', [ForecastController::class, 'modelInfo']);
     Route::post('/forecast/store-1', [ForecastController::class, 'forecastStoreOne']);
+    Route::post('/forecast/scenarios', [ForecastController::class, 'compareScenarios']);
     
     // Forecast History Logs
     Route::get('/forecast-logs', [ForecastLogController::class, 'index']);

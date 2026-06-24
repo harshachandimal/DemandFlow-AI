@@ -78,4 +78,73 @@ class ForecastController extends Controller
             return response()->json(['error' => $e->getMessage()], $status);
         }
     }
+
+    /**
+     * Compare multiple forecasting scenarios.
+     */
+    public function compareScenarios(\App\Http\Requests\ScenarioComparisonRequest $request): JsonResponse
+    {
+        try {
+            $payload = $request->validated();
+            $scenariosData = [];
+
+            foreach ($payload['scenarios'] as $scenario) {
+                $name = $scenario['name'];
+                $data = $this->forecastService->forecastStoreOne($scenario);
+                
+                $scenariosData[] = [
+                    'scenario_name' => $name,
+                    'forecast' => $data['forecast'] ?? [],
+                    'business_insights' => $data['business_insights'] ?? []
+                ];
+            }
+
+            $best = null;
+            $bestScore = -INF;
+            $bestReason = "";
+
+            foreach ($scenariosData as $data) {
+                $insights = $data['business_insights'];
+                $score = 0;
+
+                if (isset($insights['current_stock'])) {
+                    $riskScore = ['low' => 100, 'medium' => 50, 'high' => 0];
+                    $risk = strtolower($insights['stockout_risk'] ?? 'high');
+                    $score += $riskScore[$risk] ?? 0;
+
+                    if (!($insights['reorder_needed'] ?? true)) {
+                        $score += 200;
+                    }
+
+                    $score += ($insights['projected_stock_after_7_days'] ?? 0) * 0.01;
+                    $score -= ($insights['recommended_reorder_quantity'] ?? 0) * 0.05;
+
+                    if ($score > $bestScore) {
+                        $bestScore = $score;
+                        $best = $data;
+                        $bestReason = "Lowest stock-out risk, higher projected stock, or lower reorder need.";
+                    }
+                } else {
+                    $score = $insights['total_predicted_sales'] ?? 0;
+                    if ($score > $bestScore) {
+                        $bestScore = $score;
+                        $best = $data;
+                        $bestReason = "Highest predicted sales. Inventory risk cannot be compared without current_stock.";
+                    }
+                }
+            }
+
+            return response()->json([
+                'scenario_count' => count($scenariosData),
+                'scenarios' => $scenariosData,
+                'best_scenario' => [
+                    'scenario_name' => $best['scenario_name'] ?? '',
+                    'reason' => $bestReason
+                ]
+            ]);
+
+        } catch (Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
 }

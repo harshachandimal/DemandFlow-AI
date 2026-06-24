@@ -68,6 +68,7 @@ export default function Header() {
         <nav style={{ display: 'flex', gap: '0.5rem', flex: 1, marginLeft: '3rem' }}>
           <NavLink to="/dashboard" style={linkStyle}>Dashboard</NavLink>
           <NavLink to="/history" style={linkStyle}>History</NavLink>
+          <NavLink to="/scenarios" style={linkStyle}>Scenario Planner</NavLink>
         </nav>
 
         {/* Right area: live clock + Store badge */}
