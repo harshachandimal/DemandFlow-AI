@@ -1,39 +1,88 @@
 # DemandFlow AI
 
-## Phase 4.1: Laravel Backend Integration
+AI-powered demand forecasting platform for retail. Combines a PyTorch LSTM model, a FastAPI ML inference service, a Laravel API gateway, and a React dashboard.
 
-This phase integrates the FastAPI Machine Learning service with a new Laravel backend. The Laravel application serves as an API gateway for future frontend clients and manages request validation and response logging.
+---
 
-### Prerequisites
-- Python 3.10+
-- PHP 8.2+
-- Composer
+## Architecture
 
-### Running the Services
+```
+React Frontend (Vite + Tailwind)
+        │
+        ▼  HTTP (port 5173 → 8000)
+Laravel Backend (API Gateway)
+        │
+        ▼  HTTP (port 8000 → 8001)
+FastAPI ML Service
+        │
+        ▼
+PyTorch LSTM Model (Rossmann Store #1)
+```
 
-**Note**: The FastAPI ML service must be running before the Laravel backend attempts to call its endpoints.
+---
 
-1. **Start the FastAPI ML Service**
-   Open a terminal and run the ML service on port 8001 (to avoid conflict with Laravel on 8000).
-   ```bash
-   cd ml-service
-   python -m uvicorn src.api.main:app --reload --host 127.0.0.1 --port 8001
-   ```
+## Prerequisites
 
-2. **Start the Laravel Backend**
-   Open a separate terminal, ensure `.env` points to `DEMANDFLOW_ML_SERVICE_URL=http://127.0.0.1:8001`, and start the Laravel development server.
-   ```bash
-   cd backend
-   php artisan serve --host=127.0.0.1 --port=8000
-   ```
+| Tool | Version |
+|---|---|
+| Python | 3.10+ |
+| PHP | 8.2+ |
+| Composer | latest |
+| Node.js | 18+ |
+| npm | 9+ |
 
-### API Endpoints (Laravel)
+---
 
-- `GET /api/ml/health`: Returns the health status of the ML service.
-- `GET /api/ml/model-info`: Returns the details of the champion ML model currently loaded.
-- `POST /api/ml/forecast/store-1`: Generates a demand forecast and business insights.
+## Running the Services
 
-#### Example Request Body (`POST /api/ml/forecast/store-1`)
+> **Order matters**: start FastAPI first, then Laravel, then React.
+
+### 1. Start the FastAPI ML Service (port 8001)
+
+```bash
+cd ml-service
+python -m uvicorn src.api.main:app --reload --host 127.0.0.1 --port 8001
+```
+
+### 2. Start the Laravel Backend (port 8000)
+
+Ensure `.env` has: `DEMANDFLOW_ML_SERVICE_URL=http://127.0.0.1:8001`
+
+```bash
+cd backend
+php artisan serve --host=127.0.0.1 --port=8000
+```
+
+### 3. Start the React Frontend (port 5173)
+
+```bash
+cd frontend
+npm install   # only needed once
+npm run dev
+```
+
+---
+
+## URLs
+
+| Service | URL |
+|---|---|
+| React Dashboard | http://127.0.0.1:5173/dashboard |
+| Laravel API | http://127.0.0.1:8000/api |
+| FastAPI Docs | http://127.0.0.1:8001/docs |
+
+---
+
+## Laravel API Endpoints
+
+| Method | Path | Description |
+|---|---|---|
+| GET | `/api/ml/health` | ML service health check |
+| GET | `/api/ml/model-info` | Champion model metadata & metrics |
+| POST | `/api/ml/forecast/store-1` | Generate 7-day demand forecast |
+
+### Example Forecast Request
+
 ```json
 {
   "forecast_days": 7,
@@ -47,40 +96,64 @@ This phase integrates the FastAPI Machine Learning service with a new Laravel ba
 }
 ```
 
-#### Example Response Summary
+### Example Forecast Response
+
 ```json
 {
   "forecast": [
-    {
-      "date": "2015-08-01",
-      "predicted_sales": 5231
-    }
+    { "date": "2015-08-01", "predicted_sales": 5231, "demand_level": "High" }
   ],
   "business_insights": {
     "total_predicted_sales": 36617,
     "average_predicted_sales": 5231,
-    "stockout_risk": "Low",
-    "reorder_recommendation": {
-      "reorder_needed": false,
-      "recommended_reorder_date": null,
-      "suggested_order_quantity": 0
-    },
-    "projected_revenue": 457712.5
+    "stockout_risk": "low",
+    "projected_revenue": 457712.5,
+    "reorder_needed": false,
+    "recommended_reorder_date": null,
+    "recommended_reorder_quantity": 0
   }
 }
 ```
 
-### Architecture Overview
-In DemandFlow AI, **Laravel acts as the main application backend**. It is responsible for handling all incoming HTTP requests from the frontend, validating payloads, maintaining session state, and saving data to the database. 
+---
 
-**FastAPI acts as the specialized ML inference service**. It remains lightweight and is invoked internally by Laravel solely for demand forecasting using PyTorch models.
+## Dashboard Features (Phase 5.1)
 
-### Troubleshooting
+- **System Status** — Laravel & ML service connection health
+- **Champion Model Info** — model name, version, MAE / RMSE / MAPE
+- **Forecast Form** — configurable stock, pricing, promo/holiday dates
+- **KPI Cards** — total sales, avg daily, highest & lowest demand day
+- **Business Insights** — expected revenue, projected stock, stockout risk, reorder recommendation
+- **Forecast Chart** — responsive Recharts bar + line combo chart
+- **Forecast Table** — day-by-day table with demand level badges
 
-- **Port Conflict**: If Laravel returns a FastAPI error format like `{"detail":"Not Found"}`, it means FastAPI is bound to port 8000. Ensure you terminate any stray Python processes and restart FastAPI on port `8001`.
-- **ML Service Unavailable (503)**: If Laravel responds with an error stating the ML Service is unavailable, ensure your `uvicorn` instance is actively running on port `8001`. 
-- **Config Cache Issues**: If you update `.env` variables and Laravel isn't picking them up, flush the caches using:
+---
+
+## Project Structure
+
+```
+demandflow-ai/
+├── backend/          # Laravel 11 (API gateway)
+├── ml-service/       # FastAPI + PyTorch LSTM
+└── frontend/         # React 18 + Vite 8 + Tailwind 4
+    └── src/
+        ├── api/          # axiosClient + forecastApi
+        ├── components/   # layout + forecast components (.tsx)
+        ├── pages/        # DashboardPage (.tsx)
+        └── types/        # TypeScript interfaces
+        └── utils/        # formatters
+```
+
+---
+
+## Troubleshooting
+
+- **Port conflict**: Ensure FastAPI is on `8001` and Laravel on `8000`. Check for stray `uvicorn` processes.
+- **ML Service unavailable (503)**: Restart `uvicorn` on port `8001`.
+- **CORS errors in browser**: Verify `backend/config/cors.php` allows `http://127.0.0.1:5173` and `http://localhost:5173`.
+- **Config cache stale**:
   ```bash
+  cd backend
   php artisan config:clear
   php artisan cache:clear
   ```
