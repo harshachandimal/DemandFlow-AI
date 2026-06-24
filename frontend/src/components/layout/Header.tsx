@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Activity } from 'lucide-react';
+import { NavLink } from 'react-router-dom';
 
 export default function Header() {
   const [time, setTime] = useState(new Date());
@@ -11,6 +12,17 @@ export default function Header() {
 
   const timeStr = time.toLocaleTimeString('en-US', {
     hour: '2-digit', minute: '2-digit', second: '2-digit',
+  });
+
+  const linkStyle = ({ isActive }: { isActive: boolean }) => ({
+    padding: '0.4rem 0.8rem',
+    borderRadius: '0.5rem',
+    fontSize: '0.85rem',
+    fontWeight: 600,
+    color: isActive ? '#fff' : '#94a3b8',
+    background: isActive ? 'rgba(6,182,212,0.15)' : 'transparent',
+    textDecoration: 'none',
+    transition: 'all 0.2s'
   });
 
   return (
@@ -51,6 +63,12 @@ export default function Header() {
             </div>
           </div>
         </div>
+
+        {/* Navigation */}
+        <nav style={{ display: 'flex', gap: '0.5rem', flex: 1, marginLeft: '3rem' }}>
+          <NavLink to="/dashboard" style={linkStyle}>Dashboard</NavLink>
+          <NavLink to="/history" style={linkStyle}>History</NavLink>
+        </nav>
 
         {/* Right area: live clock + Store badge */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>

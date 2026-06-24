@@ -69,3 +69,18 @@ export interface ForecastResponse {
   forecast: ForecastResult[];
   business_insights: BusinessInsights;
 }
+
+export interface ForecastLogSummary {
+  id: number;
+  store_id: number;
+  total_predicted_sales: number;
+  average_predicted_sales: number;
+  stockout_risk: 'high' | 'medium' | 'low' | 'High' | 'Medium' | 'Low';
+  reorder_needed: boolean | null;
+  created_at: string;
+}
+
+export interface ForecastLog extends ForecastLogSummary {
+  request_payload: ForecastPayload;
+  response_payload: ForecastResponse;
+}

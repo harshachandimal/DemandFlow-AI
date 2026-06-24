@@ -80,6 +80,9 @@ npm run dev
 | GET | `/api/ml/health` | ML service health check |
 | GET | `/api/ml/model-info` | Champion model metadata & metrics |
 | POST | `/api/ml/forecast/store-1` | Generate 7-day demand forecast |
+| GET | `/api/ml/forecast-logs` | Get paginated forecast history logs |
+| GET | `/api/ml/forecast-logs/{id}` | Get specific forecast log details |
+| DELETE | `/api/ml/forecast-logs/{id}` | Delete a forecast log |
 
 ### Example Forecast Request
 
@@ -117,7 +120,7 @@ npm run dev
 
 ---
 
-## Dashboard Features (Phase 5.1)
+## Dashboard Features (Phase 5.1 - 5.3)
 
 - **System Status** — Laravel & ML service connection health
 - **Champion Model Info** — model name, version, MAE / RMSE / MAPE
@@ -126,6 +129,7 @@ npm run dev
 - **Business Insights** — expected revenue, projected stock, stockout risk, reorder recommendation
 - **Forecast Chart** — responsive Recharts bar + line combo chart
 - **Forecast Table** — day-by-day table with demand level badges
+- **Forecast History Dashboard** — browse, view details, and manage past forecasts using the `/history` route
 
 ---
 
