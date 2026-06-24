@@ -121,7 +121,7 @@ npm run dev
 
 ---
 
-## Dashboard Features (Phase 5.1 - 5.4)
+## Dashboard Features (Phase 5.1 - 5.5)
 
 - **System Status** — Laravel & ML service connection health
 - **Champion Model Info** — model name, version, MAE / RMSE / MAPE
@@ -132,6 +132,11 @@ npm run dev
 - **Forecast Table** — day-by-day table with demand level badges
 - **Forecast History Dashboard** — browse, view details, and manage past forecasts using the `/history` route
 - **What-if Scenario Planner** — compare up to 5 parallel forecasts side-by-side, visualizing data on a combined line chart, and utilizing an automated 'Best Scenario' heuristic on the `/scenarios` route.
+- **Executive Reporting & Exporting** — clean, professional, print-ready reports that convert ML predictions into actionable business decisions. Available across:
+  - Dashboard Forecast Result
+  - Scenario Planner Result
+  - Forecast History Detail
+  Includes tools to export to CSV, export to pretty JSON, or open a printer-friendly layout (Print/Save as PDF).
 
 *Note: The Scenario Planner reuses the trained PyTorch LSTM model behind the scenes, parallelizing multiple predictive runs to compare hypothetical business decisions, rather than training separate ML models.*
 

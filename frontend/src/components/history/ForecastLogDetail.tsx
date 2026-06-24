@@ -2,6 +2,8 @@ import { ArrowLeft, Package, DollarSign } from 'lucide-react';
 import { ForecastLog } from '../../types';
 import { fmtNumber } from '../../utils/formatters';
 import ForecastTable from '../forecast/ForecastTable';
+import ReportActions from '../reports/ReportActions';
+import { downloadCsvReport, downloadJsonReport, printReportSection, formatForecastReportData } from '../../utils/reportUtils';
 
 interface DetailProps {
   log: ForecastLog;
@@ -13,18 +15,33 @@ export default function ForecastLogDetail({ log, onBack }: DetailProps) {
   const res = log.response_payload;
   const insights = res.business_insights;
 
+  const handleExportCsv = () => {
+    downloadCsvReport(res.forecast, `history-forecast-${log.id}-${Date.now()}.csv`);
+  };
+
+  const handleExportJson = () => {
+    downloadJsonReport(formatForecastReportData(res), `history-forecast-${log.id}-${Date.now()}.json`);
+  };
+
+  const handlePrint = () => {
+    printReportSection('history-report');
+  };
+
   return (
-    <div className="fade-up">
-      <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '2rem' }}>
-        <button onClick={onBack} className="btn" style={{ background: 'rgba(255,255,255,0.05)', padding: '0.5rem' }}>
-          <ArrowLeft size={20} />
-        </button>
-        <div>
-          <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: '#fff' }}>Forecast Details</h2>
-          <div style={{ color: '#94a3b8', fontSize: '0.9rem' }}>
-            Generated on {new Date(log.created_at).toLocaleString()}
+    <div id="history-report" className="fade-up report-container" style={{ padding: '1rem', backgroundColor: 'var(--color-bg)' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '2rem', flexWrap: 'wrap', gap: '1rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+          <button onClick={onBack} className="btn hide-on-print" style={{ background: 'rgba(255,255,255,0.05)', padding: '0.5rem', borderRadius: '0.5rem', border: '1px solid rgba(255,255,255,0.1)', cursor: 'pointer', color: '#fff' }}>
+            <ArrowLeft size={20} />
+          </button>
+          <div>
+            <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: '#fff' }}>Forecast Details</h2>
+            <div style={{ color: '#94a3b8', fontSize: '0.9rem' }}>
+              Generated on {new Date(log.created_at).toLocaleString()}
+            </div>
           </div>
         </div>
+        <ReportActions onExportCsv={handleExportCsv} onExportJson={handleExportJson} onPrint={handlePrint} />
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.5rem', marginBottom: '2rem' }}>

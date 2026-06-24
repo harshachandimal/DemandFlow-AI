@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { getMlHealth, getModelInfo, forecastStoreOne } from '../api/forecastApi';
 import StatusCard from '../components/forecast/StatusCard';
 import ModelInfoCard from '../components/forecast/ModelInfoCard';
+import ForecastReportCard from '../components/reports/ForecastReportCard';
 import ForecastForm from '../components/forecast/ForecastForm';
 import DemandSummaryCards from '../components/forecast/DemandSummaryCards';
 import BusinessInsightsCard from '../components/forecast/BusinessInsightsCard';
@@ -105,6 +106,8 @@ export default function DashboardPage() {
           </div>
 
           <ForecastTable forecast={forecast} />
+
+          <ForecastReportCard data={{ forecast, business_insights: insights }} modelInfo={modelInfo} />
         </>
       )}
 

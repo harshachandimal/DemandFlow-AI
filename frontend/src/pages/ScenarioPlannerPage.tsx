@@ -6,6 +6,7 @@ import ScenarioFormCard from '../components/scenarios/ScenarioFormCard';
 import ScenarioComparisonTable from '../components/scenarios/ScenarioComparisonTable';
 import ScenarioForecastChart from '../components/scenarios/ScenarioForecastChart';
 import BestScenarioCard from '../components/scenarios/BestScenarioCard';
+import ScenarioReportCard from '../components/reports/ScenarioReportCard';
 
 export default function ScenarioPlannerPage() {
   const [scenarios, setScenarios] = useState<ScenarioConfig[]>([
@@ -102,6 +103,7 @@ export default function ScenarioPlannerPage() {
             <BestScenarioCard best={results.best_scenario} />
             <ScenarioComparisonTable results={results.scenarios} />
             <ScenarioForecastChart results={results.scenarios} />
+            <ScenarioReportCard data={results} />
           </div>
         )}
       </div>

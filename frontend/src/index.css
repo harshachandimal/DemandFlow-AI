@@ -152,3 +152,56 @@ body {
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
 ::-webkit-scrollbar-thumb:hover { background: #475569; }
+
+/* ── Print Styles ───────────────────────────────────────── */
+@media print {
+  /* Only display the report container if we are in print mode */
+  body.printing-report {
+    background: #fff;
+    color: #000;
+  }
+  
+  body.printing-report * {
+    visibility: hidden;
+  }
+
+  body.printing-report .print-target,
+  body.printing-report .print-target * {
+    visibility: visible;
+  }
+
+  body.printing-report .print-target {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    background: #fff !important;
+  }
+
+  .hide-on-print {
+    display: none !important;
+  }
+
+  /* Override glass-card and dark themes for printing */
+  .print-target, 
+  .print-target .glass-card,
+  .print-target [style*="background"] {
+    background: #fff !important;
+    border-color: #ccc !important;
+    color: #000 !important;
+    box-shadow: none !important;
+  }
+
+  .print-target h1, 
+  .print-target h2, 
+  .print-target h3, 
+  .print-target h4,
+  .print-target p,
+  .print-target span,
+  .print-target td,
+  .print-target th {
+    color: #000 !important;
+  }
+}
